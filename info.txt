@@ -1,0 +1,9 @@
+monday
+A
+art
+chem
+physics
+spanish
+math
+bio
+none
