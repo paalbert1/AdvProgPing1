@@ -120,7 +120,9 @@ def data_gather(page: ft.Page):
     addhorsey()
 def next():
     primary = Primary()
-    primary.interface()
+    Primary()
+
+
 ft.app(data_gather)
 
 
