@@ -1,6 +1,8 @@
+# import flet
 import flet as ft
 from flet.core import page
 
+# create initial class
 class Homework(ft.Row):
     def __init__(self, homework_name, homework_status_change, homework_delete):
         super().__init__(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER)
@@ -29,25 +31,30 @@ class Homework(ft.Row):
                           on_click=self.save_clicked),
         ])
 
+    # define edit function to allow edit acess to previous inputs
     def toggle_edit(self, e):
         self.edit_name.value = self.display_homework.label
         self.controls[0].visible = False
         self.edit_view.visible = True
         self.update()
 
+    #define saving function to save after each input/action by user
     def save_clicked(self, e):
         self.display_homework.label = self.edit_name.value
         self.controls[0].visible = True
         self.edit_view.visible = False
         self.update()
 
+    # define status function to display changes made after edits
     def status_changed(self, e):
         self.completed = self.display_homework.value
         self.homework_status_change(self)
 
+    # define delete function to let the user get rid of unwanted assignments
     def delete_clicked(self, e):
         self.homework_delete(self)
 
+# create and initiate a second class for directional pieces mostly some UI displays
 class HomeworkApp(ft.Column):
     def __init__(self):
         super().__init__()
@@ -75,6 +82,7 @@ class HomeworkApp(ft.Column):
             ]),
         ]
 
+    # define function to allow new homework to be added easily and have it update the previous list of assignments if there is any
     def add_clicked(self, e):
         if self.new_homework.value:
             homework = Homework(self.new_homework.value, self.homework_status_change, self.homework_delete)
@@ -83,21 +91,26 @@ class HomeworkApp(ft.Column):
             self.new_homework.focus()
             self.update()
 
+    # define status change of ongoing assignments to show what needs to be done vs already done
     def homework_status_change(self, homework):
         self.update()
 
+    # define delete function to allow user to delete unwanted assignments
     def homework_delete(self, homework):
         self.homeworks.controls.remove(homework)
         self.update()
 
+    # define tab function to switch tabs
     def tabs_changed(self, e):
         self.update()
 
+    # define clear function to get rid of completed assignments if the user wants to
     def clear_clicked(self, e):
         for homework in list(self.homeworks.controls):  # Avoid modifying while iterating
             if homework.completed:
                 self.homework_delete(homework)
 
+    # define function and label the status options
     def before_update(self):
         status = self.filter.tabs[self.filter.selected_index].text
         count = 0
@@ -111,6 +124,7 @@ class HomeworkApp(ft.Column):
                 count += 1
         self.items_left.value = f"you have {count} homework assignment(s) left"
 
+# define main function to run code and finish UI with background color, title, and alignments if necessary
 def main(page: ft.Page):
     page.bgcolor = ft.Colors.BLUE_50
     page.title = "Homework Reminders"
