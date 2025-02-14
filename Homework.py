@@ -2,7 +2,7 @@
 import flet as ft
 from flet.core import page
 
-# create initial class
+# create and initialize class that defines homework name, homework status, and homework delete
 class Homework(ft.Row):
     def __init__(self, homework_name, homework_status_change, homework_delete):
         super().__init__(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER)
@@ -11,11 +11,11 @@ class Homework(ft.Row):
         self.homework_status_change = homework_status_change
         self.homework_delete = homework_delete
 
-        # Display all of the necessary controls
+        # Display all of the necessary controls for UI
         self.display_homework = ft.Checkbox(value=False, label=self.homework_name, on_change=self.status_changed)
         self.edit_name = ft.TextField(expand=1)
 
-        # Buttons for user to click on that all upon ui
+        # Buttons for user to click on that call upon ui
         self.edit_button = ft.IconButton(icon=ft.icons.CREATE_OUTLINED, tooltip="Edit", on_click=self.toggle_edit)
         self.delete_button = ft.IconButton(icon=ft.icons.DELETE_OUTLINE, tooltip="Delete", on_click=self.delete_clicked)
 
@@ -82,7 +82,7 @@ class HomeworkApp(ft.Column):
             ]),
         ]
 
-    # define function to allow new homework to be added easily and have it update the previous list of assignments if there is any
+    # define function to allow new homework to be added easily and have it update the previous list of assignments if there is any put in by user already
     def add_clicked(self, e):
         if self.new_homework.value:
             homework = Homework(self.new_homework.value, self.homework_status_change, self.homework_delete)
