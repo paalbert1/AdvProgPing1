@@ -1,5 +1,21 @@
+# Redo UI to match Homework app UI closely so it is simplistic and easy for user to understand
+import signal
 import flet as ft
 import datetime
+
+def handler(signum, frame):
+    print(f"signal {signum} received")
+
+signal.signal(signal.SIGINT, handler)
+
+import threading
+
+def thread_function():
+    signal.signal(signal.SIGINT, handler)
+
+thread = threading.Thread(target=thread_function)
+thread.start()
+thread.join()
 
 class Extracurricular(ft.Row):
     def __init__(self, extracurricular_name, extracurricular_date):
@@ -47,9 +63,13 @@ class Extracurricular(ft.Row):
         self.extracurricular_delete(self)
 
     def extracurricular_status_change(self, extracurricular):
-###need to add her
+        self.extracurricular_status_change(self)
+        #need to add here
+
     def extracurricular_delete(self, extracurricular):
-###need to add here
+        self.extracurricular_delete(self)
+        #need to add here
+
 class ExtracurricularApp(ft.Column):
     def __init__(self):
         super().__init__()
@@ -89,14 +109,25 @@ class ExtracurricularApp(ft.Column):
         self.update()
 
     def tabs_changed(self, e):
+        self.update()
         ###add more here
 
     def clear_clicked(self, e):
+        for Extracurricular in list(self.extracurriculars.controls):
+            if Extracurricular.completed:
+                self.extracurricular_delete(Extracurricular)
         ### add more here
 
-def main():
+    def extracurricular_delete(self, Extracurricular):
+        pass
+
+def main(page: ft.Page):
     app = ExtracurricularApp()
     ft.app(target=app)
+    page.bgcolor = ft.Colors.BLUE_50
+    page.title = "Extracurricular Schedule"
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    page.scroll = ft.ScrollMode.ADAPTIVE
+    page.add(ExtracurricularApp())
 
-if __name__ == "__main__":
-    main()
+ft.app(main)
