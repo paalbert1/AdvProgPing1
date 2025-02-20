@@ -1,7 +1,9 @@
 import datetime
 import flet as ft
-from Primary import Primary
-from flet.core.alignment import center
+from flet.core import page
+
+#from Primary import Primary
+#from flet.core.alignment import center
 close = "n"
 blocks = ["A", "B", "C", "D", "E", "F", "H1", "H2", "H3"]
 class_titles = []
@@ -118,9 +120,9 @@ def data_gather(page: ft.Page):
                 border_radius=10,
         ))
     addhorsey()
-def next():
-    primary = Primary()
-    Primary()
+    def next():
+        page.window.close()
+
 
 
 ft.app(data_gather)

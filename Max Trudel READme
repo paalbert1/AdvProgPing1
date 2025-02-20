@@ -1,0 +1,27 @@
+Brief description of your part of the app’s functionality.
+- my part of the app is meant to keep track of students assignments and any studying they may have to
+- it includes an input where the user types in everything they have to do for homework
+- it then uses a checkbox feature to be able to show when your work is completed and what you have left to do
+- it is very helpful to keep track of all of your work
+- works well as a to do list and for a lot of students, like me, it helps them stay organized and not forget any of their work 
+- I am also working on adding an extracurricular section to this part of the app where students can enter their practices and game to plan accordingly
+  
+List of features implemented.
+- The app includes three main tabs, "all homework," "needs to be done," and "already finished."
+- after checking the box next to your assignment it indicates that it is done and it automatically moves to the already finished tab
+- Also has a count of the total assignments that the user has to do
+
+Known issues (if any).
+- I would like to add a due date section where the user inputs the date that their work is due
+- I think this would help the user plan better in advance
+- also a bit of an issue running the code from simones computer and integrating my part of the app into her code
+- might have to break down my code and seperate it more into different parts rather than having it all in one place
+- create a general code and then call upon each class within
+  
+Key functions explained briefly.
+- The main functions I wrote are made to add a new assignment, edit an assignment, save an assignment, clear the old assignments, and switch between tabs
+- toggle_edit allows you to edit a previous assignment entered, change its name/what the assignment is
+- save_clicked allows the user input to be saved and listed below
+- status_changed allows the user to change the status of their work to completed
+- add_clicked allows the user to add a new assignment to their list of homework
+- homework_delete allows the user to delete an assignment or clear completed assignments
