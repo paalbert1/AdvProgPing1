@@ -125,10 +125,12 @@ class HomeworkApp(ft.Column):
         self.items_left.value = f"you have {count} homework assignment(s) left"
 
 # define main function to run code and finish UI with background color, title, and alignments if necessary
-def main(page: ft.Page):
-    page.bgcolor = ft.Colors.BLUE_50
-    page.title = "Homework Reminders"
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.scroll = ft.ScrollMode.ADAPTIVE
-    page.add(HomeworkApp())
-ft.app(main)
+class Toodo():
+    print("blahblah")
+    def main(page: ft.Page):
+        page.bgcolor = ft.Colors.BLUE_50
+        page.title = "Homework Reminders"
+        page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+        page.scroll = ft.ScrollMode.ADAPTIVE
+        page.add(HomeworkApp())
+    ft.app(main)
