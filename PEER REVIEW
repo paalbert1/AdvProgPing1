@@ -1,0 +1,35 @@
+PEER REVIEW
+
+CODE READABILITY
+- very easy to understand after reading through it a couple times
+- could rename some functions to make their purpose a bit clearer and easier for someone who doesn't already know what the codes purpose is to understand
+- example for above, could change the function name "classes_good" to something a bit more meaningful to its purpose
+- really good use of indentation, helps make it easy to follow while reading
+- could a some more comments, always super helpful
+
+CODE STRUCTURE
+- really well formatted, easy to undersatnd functionality of the different classes
+- good use of a list to keep track of each block in the schedule
+- the functions are defined clearly and their usage is mostly very clear
+
+USE OF PROGRAMMING CONCEPTS
+- very good use of variables in your code
+- well used loop inside of the "checkname" function
+- well formatted list, called upon well throughout the code to allow user to input their own courses in
+- good use of functions, some could have more meaningful names like I said before
+
+FUNCTIONALITY
+- everything works very well for me when I tried all the code
+- all the UI looks great
+- app is very clear and easy to navigate
+- instructions within the UI on the app are super helpful
+
+SUGGESTIONS FOR IMPROVEMENT
+- overall really good and impressive code, some minor suggestions for improvement I have are:
+- naming your functions to make them a bit clearer and easier to follow when reading the code,
+for the most part I could tell their purpose but someone who doesn't know how the app works already
+might be a little confused at some points. 
+- Another thing I think you could possibly improve in your code is maybe breaking down the "data_gather"
+function and splitting it into 2 or 3 seperate functions. The one function seems to be doing a lot, maybe 
+too much. It sets up UI, handles the file, and also manages user inputs. It might make a bit more sense
+to split it up a bit. With that being said, the code works well so it doesn't seem like a super urgent change.
