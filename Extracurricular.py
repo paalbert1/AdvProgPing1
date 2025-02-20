@@ -2,6 +2,8 @@ import flet as ft
 import datetime
 from flet.core import page
 
+from ExtracurricWithUI import ExtracurricularApp
+
 class Extracurricular(ft.Row):
     def __init__(self, Extracurricular_name, Extracurricular_status_change, Extracurricular_delete):
         super().__init__(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER)
@@ -75,8 +77,12 @@ def add_reminder():
         print("Invalid date format. Please enter the date in YYYY-MM-DD format.")
 
 # use loop to be able to create multiple reminders
-def main():
-    print("Here you will be able to add a reminder for an upcoming event, you can add a game, practice, or any other event you may need to plan for.")
+def main(page: ft.Page):
+    page.bgcolor = ft.Colors.BLUE_GREY_50
+    page.title = "Your Personal Extracurricular Schedule"
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    page.scroll = ft.ScrollMode.ADAPTIVE
+    page.add(ExtracurricularApp())
     while True:
         add_reminder()
         cont = input("Do you want to add another reminder? (y/n): ").lower()
@@ -84,6 +90,7 @@ def main():
             print("You're all set")
             break
 
-### run the program
+    ft.app(main)
+# run the program
 if __name__ == "__main__":
     main()
