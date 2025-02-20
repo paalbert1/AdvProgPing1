@@ -31,14 +31,14 @@ class Homework(ft.Row):
                           on_click=self.save_clicked),
         ])
 
-    # define edit function to allow edit acess to previous inputs
+    # define edit function to allow edit access to previous inputs
     def toggle_edit(self, e):
         self.edit_name.value = self.display_homework.label
         self.controls[0].visible = False
         self.edit_view.visible = True
         self.update()
 
-    #define saving function to save after each input/action by user
+    # define saving function to save after each input/action by user
     def save_clicked(self, e):
         self.display_homework.label = self.edit_name.value
         self.controls[0].visible = True
@@ -61,7 +61,7 @@ class HomeworkApp(ft.Column):
         self.new_homework = ft.TextField(hint_text="Enter your homework assignment and it's due date here", on_submit=self.add_clicked, expand=True)
         self.homeworks = ft.Column()
 
-        # Filter all of the tabs to make it less confusing and keep simple
+        # Filter all of the tabs to make it less confusing and keep the app simple for easy user interactions
         self.filter = ft.Tabs(
             scrollable=False, selected_index=0, on_change=self.tabs_changed,
             tabs=[ft.Tab(text="All homework"), ft.Tab(text="Needs to be done"), ft.Tab(text="Already finished!")]
@@ -100,7 +100,7 @@ class HomeworkApp(ft.Column):
         self.homeworks.controls.remove(homework)
         self.update()
 
-    # define tab function to switch tabs
+    # define tab function to switch between the tabs
     def tabs_changed(self, e):
         self.update()
 
