@@ -63,35 +63,38 @@ class Extracurricular(ft.Row):
         self.update()
 
 def add_reminder(page):
+    event_input = ft.TextField(label="Event Name")
+    date_input = ft.TextField(label="Event Date (YYYY-MM-DD)")
+
     def on_add_reminder_click(e):
-        event = page.get_text("event_input")
-        date = page.get_text("date_input")
+        event = event_input.value
+        date = date_input.value
 
-    try:
-        event_date = datetime.datetime.strptime(date, "%Y-%m-%d")
-        current_date = datetime.datetime.now()
-        if event_date > current_date:
-            print(f"Reminder added for '{event}' on {event_date.strftime('%A, %B %d, %Y')}")
-        else:
-            print("The event date should be in the future. Please try again.")
-    except ValueError:
-        print("Invalid date format. Please enter the date in YYYY-MM-DD format.")
+        try:
+            event_date = datetime.datetime.strptime(date, "%Y-%m-%d")
+            current_date = datetime.datetime.now()
+            if event_date > current_date:
+                page.add(ft.Text(f"Reminder added for '{event}' on {event_date.strftime('%A, %B %d, %Y')}", color=ft.colors.GREEN))
+            else:
+                page.add(ft.Text("The event date should be in the future. Please try again.", color=ft.colors.RED))
+        except ValueError:
+            page.add(ft.Text("Invalid date format. Please enter the date in YYYY-MM-DD format.", color=ft.colors.RED))
 
-page.add(
-    ft.Column(
-        [
-            ft.Text("Enter Extracurricular Event and Date"),
-                ft.TextField(id="event_input", label="Event Name"),
-                ft.TextField(id="date_input", label="Event Date (YYYY-MM-DD)"),
+    # Create UI elements
+    page.add(
+        ft.Column(
+            [
+                ft.Text("Enter Extracurricular Event and Date"),
+                event_input,
+                date_input,
                 ft.ElevatedButton("Add Reminder", on_click=on_add_reminder_click)
             ]
         )
     )
 
-
 # use loop to be able to create multiple reminders
 def main(page: ft.Page):
-    page.bgcolor = ft.Colors.BLUE_GREY_50
+    page.bgcolor = ft.Colors.INDIGO_200
     page.title = "Your Personal Extracurricular Schedule"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.scroll = ft.ScrollMode.ADAPTIVE

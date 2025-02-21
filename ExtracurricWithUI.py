@@ -6,22 +6,18 @@ import datetime
 def handler(signum, frame):
     print(f"signal {signum} received")
 
-signal.signal(signal.SIGINT, handler)
-
-import threading
-
-def thread_function():
+import sys
+if sys.platform != "win32":
     signal.signal(signal.SIGINT, handler)
 
-thread = threading.Thread(target=thread_function)
-thread.start()
-thread.join()
 
 class Extracurricular(ft.Row):
-    def __init__(self, extracurricular_name, extracurricular_date):
+    def __init__(self, extracurricular_name, extracurricular_date, extracurricular_status_change):
         super().__init__(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER)
+        self.completed = None
         self.extracurricular_name = extracurricular_name
         self.extracurricular_date = extracurricular_date
+        self.extracurricular_status_change = extracurricular_status_change
         assert isinstance(self.extracurricular_date, object)
 
         self.display_Extracurriculars = ft.Checkbox(value=False, label=self.extracurricular_name,
@@ -63,6 +59,7 @@ class Extracurricular(ft.Row):
         self.extracurricular_delete(self)
 
     def extracurricular_status_change(self, extracurricular):
+        self.update()
         self.extracurricular_status_change(self)
         #need to add here
 
@@ -80,7 +77,7 @@ class ExtracurricularApp(ft.Column):
         # Filter all of the tabs to make it less confusing and keep it simple
         self.filter = ft.Tabs(
             scrollable=False, selected_index=0, on_change=self.tabs_changed,
-            tabs=[ft.Tab(text="All extracurriculars"), ft.Tab(text="In the future"), ft.Tab(text="Already done")]
+            tabs=[ft.Tab(text="All extracurriculars"), ft.Tab(text="In the future"), ft.Tab(text="Past events")]
         )
 
         self.items_left = ft.Text("0 items left")
@@ -104,27 +101,26 @@ class ExtracurricularApp(ft.Column):
     def add_clicked(self, e):
         extracurricular_name = self.new_extracurricular.value
         extracurricular_date = datetime.datetime.now()  # Replace with actual date input if needed
-        self.extracurriculars.controls.append(Extracurricular(extracurricular_name, extracurricular_date))
+        self.extracurriculars.controls.append(Extracurricular(extracurricular_name, extracurricular_date, extracurricular_status_change= None))
         self.new_extracurricular.value = ""
         self.update()
 
     def tabs_changed(self, e):
         self.update()
-        ###add more here
 
     def clear_clicked(self, e):
         for Extracurricular in list(self.extracurriculars.controls):
             if Extracurricular.completed:
                 self.extracurricular_delete(Extracurricular)
-        ### add more here
-
-    def extracurricular_delete(self, Extracurricular):
-        pass
+       
+    def extracurricular_delete(self, extracurricular):
+        # Remove the extracurricular from the list
+        self.extracurriculars.controls.remove(extracurricular)
+        self.update()
 
 def main(page: ft.Page):
     app = ExtracurricularApp()
-    ft.app(target=app)
-    page.bgcolor = ft.Colors.BLUE_50
+    page.bgcolor = ft.Colors.INDIGO_200
     page.title = "Extracurricular Schedule"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.scroll = ft.ScrollMode.ADAPTIVE
