@@ -1,8 +1,8 @@
 import flet as ft
 import datetime
 from flet.core import page
-
 from ExtracurricWithUI import ExtracurricularApp
+
 
 class Extracurricular(ft.Row):
     def __init__(self, Extracurricular_name, on_status_change, on_delete):
@@ -36,8 +36,7 @@ class Extracurricular(ft.Row):
             controls=[
                 self.edit_name,
                 ft.IconButton(
-
-icon=ft.icons.DONE_OUTLINE_OUTLINED,
+                    icon=ft.icons.DONE_OUTLINE_OUTLINED,
                     icon_color=ft.colors.BLUE,
                     tooltip="Save",
                     on_click=self.save_clicked
@@ -63,11 +62,11 @@ icon=ft.icons.DONE_OUTLINE_OUTLINED,
         self.edit_view.visible = False
         self.update()
 
-def add_reminder():
-    event = input("\nWhat extracurricular event would you like to set a reminder for? \nPlease enter the event here: ")
-    date = input("Enter the date for your event (YYYY-MM-DD): ")
+def add_reminder(page):
+    def on_add_reminder_click(e):
+        event = page.get_text("event_input")
+        date = page.get_text("date_input")
 
-# used chat to help a bit with this step to make sure the date is valid
     try:
         event_date = datetime.datetime.strptime(date, "%Y-%m-%d")
         current_date = datetime.datetime.now()
@@ -78,21 +77,27 @@ def add_reminder():
     except ValueError:
         print("Invalid date format. Please enter the date in YYYY-MM-DD format.")
 
+page.add(
+    ft.Column(
+        [
+            ft.Text("Enter Extracurricular Event and Date"),
+                ft.TextField(id="event_input", label="Event Name"),
+                ft.TextField(id="date_input", label="Event Date (YYYY-MM-DD)"),
+                ft.ElevatedButton("Add Reminder", on_click=on_add_reminder_click)
+            ]
+        )
+    )
+
+
 # use loop to be able to create multiple reminders
 def main(page: ft.Page):
     page.bgcolor = ft.Colors.BLUE_GREY_50
     page.title = "Your Personal Extracurricular Schedule"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.scroll = ft.ScrollMode.ADAPTIVE
-    page.add(ExtracurricularApp())
-    while True:
-        add_reminder()
-        cont = input("Do you want to add another reminder? (y/n): ").lower()
-        if cont != 'y':
-            print("You're all set")
-            break
 
-    ft.app(main)
-# run the program
-if __name__ == "__main__":
-    main()
+    page.add(ExtracurricularApp())
+
+    add_reminder(page)
+
+ft.app(target=main)
