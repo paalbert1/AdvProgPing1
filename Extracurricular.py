@@ -5,18 +5,16 @@ from flet.core import page
 from ExtracurricWithUI import ExtracurricularApp
 
 class Extracurricular(ft.Row):
-    def __init__(self, Extracurricular_name, Extracurricular_status_change, Extracurricular_delete):
+    def __init__(self, Extracurricular_name, on_status_change, on_delete):
         super().__init__(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER)
 
         self.extracurricular_name = Extracurricular_name
-        self.extracurricular_status_change = Extracurricular_status_change
-        self.extracurricular_delete = Extracurricular_delete
 
         # Display extracurricular name checkbox
         self.display_extracurricular = ft.Checkbox(
             value=False,
             label=self.extracurricular_name,
-            on_change=self.extracurricular_status_change
+            on_change=on_status_change
         )
 
         # Edit and delete buttons
@@ -28,7 +26,7 @@ class Extracurricular(ft.Row):
         self.delete_button = ft.IconButton(
             icon=ft.icons.DELETE_OUTLINE,
             tooltip="Delete",
-            on_click=self.extracurricular_delete
+            on_click=on_delete
         )
 
         # Edit view for renaming extracurricular
@@ -38,7 +36,8 @@ class Extracurricular(ft.Row):
             controls=[
                 self.edit_name,
                 ft.IconButton(
-                    icon=ft.icons.DONE_OUTLINE_OUTLINED,
+
+icon=ft.icons.DONE_OUTLINE_OUTLINED,
                     icon_color=ft.colors.BLUE,
                     tooltip="Save",
                     on_click=self.save_clicked
@@ -52,12 +51,15 @@ class Extracurricular(ft.Row):
             self.edit_view
         ]
 
-    def toggle_edit(self, e):
+    def toggle_edit(self, e=None):
         self.edit_view.visible = not self.edit_view.visible
         self.update()
 
-    def save_clicked(self, e):
-        self.display_extracurricular.label = self.edit_name.value
+    def save_clicked(self, e=None):
+        new_name = self.edit_name.value
+        if new_name:
+            self.extracurricular_name = new_name
+            self.display_extracurricular.label = new_name
         self.edit_view.visible = False
         self.update()
 
