@@ -10,7 +10,6 @@ import sys
 if sys.platform != "win32":
     signal.signal(signal.SIGINT, handler)
 
-
 class Extracurricular(ft.Row):
     def __init__(self, extracurricular_name, extracurricular_date, extracurricular_status_change):
         super().__init__(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER)
