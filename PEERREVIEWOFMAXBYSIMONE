@@ -1,0 +1,30 @@
+PEER REVIEW
+
+CODE READABILITY
+- Functions are well and descriptively named and it is easy to understand the logic
+-the comments are helpful and lay things out clearly
+-organization via multiple classes is a little bit confusing and it may have been easier to have one class per script
+
+CODE STRUCTURE
+- The use of instantiation is very innovative and impressive
+-the logical flow of extracurriculars is well thought out it was smart to access the date from Pythons database
+- I am a little confused about the self. for everything not that I think its wrong I just wonder if it could be streamlined
+
+USE OF PROGRAMMING CONCEPTS
+- incredible use of thread, that is very cool
+-good use of for loops in clear_clicked
+-good use of except
+-couldn't find any traditional use of lists but there must be one to track extracurriculars 
+beacuse you use .append, I wonder if the list was substituted for a thread
+
+FUNCTIONALITY
+- Homework works wonderfully, is streamlined and incredibly versatile
+-the interface is also aesthetic
+-extracurriculars doesn't currently work but is certainly getting there
+
+
+SUGGESTIONS FOR IMPROVEMENT
+- The is typically more than one class per script wich is somthing that makes 
+integration really difficult, perhaps each class should be seperated into diffrent scripts
+-a lot of funcions are called, but don't do anything as far as I can tell, like extacurricular_delete
+so maybe it would be beneficial to work on one thing at a time 
