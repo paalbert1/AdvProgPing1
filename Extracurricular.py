@@ -24,9 +24,9 @@ class Extracurricular(ft.Row):
             on_click=self.toggle_edit
         )
         self.delete_button = ft.IconButton(
-            icon=ft.icons.DELETE_OUTLINE,
+            icon=ft.icons.DELETE_OUTLINED,
             tooltip="Delete",
-            on_click=on_delete
+            on_click=self.toggle_delete
         )
 
         # Edit view for renaming extracurricular
@@ -54,6 +54,10 @@ class Extracurricular(ft.Row):
         self.edit_view.visible = not self.edit_view.visible
         self.update()
 
+    def toggle_delete(self, e=None):
+        self.edit_view.visible = False
+        self.update()
+
     def save_clicked(self, e=None):
         new_name = self.edit_name.value
         if new_name:
@@ -74,7 +78,7 @@ def add_reminder(page):
             event_date = datetime.datetime.strptime(date, "%Y-%m-%d")
             current_date = datetime.datetime.now()
             if event_date > current_date:
-                page.add(ft.Text(f"Reminder added for '{event}' on {event_date.strftime('%A, %B %d, %Y')}", color=ft.colors.GREEN))
+                page.add(ft.Text(f"Reminder added for '{event}' on {event_date.strftime('%A, %B %d, %Y')}", color=ft.colors.BLACK))
             else:
                 page.add(ft.Text("The event date should be in the future. Please try again.", color=ft.colors.RED))
         except ValueError:
