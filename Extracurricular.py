@@ -55,8 +55,9 @@ class Extracurricular(ft.Row):
         self.update()
 
     def toggle_delete(self, e=None):
-        self.edit_view.visible = False
-        self.update()
+       if self in self._control_parent.controls:
+           self._control_parent.controls.remove(self)
+           self._control_parent.update()
 
     def save_clicked(self, e=None):
         new_name = self.edit_name.value
@@ -95,6 +96,27 @@ def add_reminder(page):
             ]
         )
     )
+
+def tabs_changed(self, e):
+    self.update()
+
+def clear_clicked(self, e):
+        for extracurricular in list(self.extracurriculars.controls):
+            if extracurricular.completed:
+                self.extracurricular_delete(extracurricular)
+
+def before_update(self):
+    status = self.filter.tabs[self.filter.selected_index].text
+    count = 0
+    for extracurricular in self.Extracurricular.controls:
+        extracurricular.visible = (
+                status == "All Extracurriculars"
+                or (status == "In the future" and not extracurricular.completed)
+                or (status == "Past events" and extracurricular.completed)
+         )
+        if extracurricular.visible:
+                    count += 1
+            self.items_left.value = f"{count} items left"
 
 # use loop to be able to create multiple reminders
 def main(page: ft.Page):
