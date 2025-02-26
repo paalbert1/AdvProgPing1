@@ -128,7 +128,7 @@ class HomeworkApp(ft.Column):
 class Toodo():
     print("blahblah")
     def main(page: ft.Page):
-        page.bgcolor = ft.Colors.INDIGO_200
+        page.bgcolor = ft.Colors.GREEN_300
         page.title = "Homework Reminders"
         page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         page.scroll = ft.ScrollMode.ADAPTIVE
