@@ -107,16 +107,18 @@ def clear_clicked(self, e):
 
 def before_update(self):
     status = self.filter.tabs[self.filter.selected_index].text
-    count = 0
+    count = 0  # Initialize count variable
+
     for extracurricular in self.Extracurricular.controls:
         extracurricular.visible = (
                 status == "All Extracurriculars"
                 or (status == "In the future" and not extracurricular.completed)
                 or (status == "Past events" and extracurricular.completed)
-         )
+        )
         if extracurricular.visible:
-                    count += 1
-            self.items_left.value = f"{count} items left"
+            count += 1
+
+    self.items_left.value = f"{count} items left"
 
 # use loop to be able to create multiple reminders
 def main(page: ft.Page):
