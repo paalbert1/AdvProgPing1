@@ -1,3 +1,4 @@
+
 import flet as ft
 import datetime
 from flet.core import page
@@ -8,13 +9,29 @@ class Extracurricular(ft.Row):
     def __init__(self, Extracurricular_name, on_status_change, on_delete):
         super().__init__(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER)
 
+        self.completed = False
+
+        self.on_status_change = on_status_change
+
+        self.on_delete = on_delete
+
         self.extracurricular_name = Extracurricular_name
+
+        self.display_extracurricular = ft.Checkbox(
+            value=False,
+        label = self.extracurricular_name,
+        on_change = self.status_changed  # Local handler
+
+        )
+
+    def status_changed(self, e):
+        self.completed = self.display_extracurricular.value  # Update based on checkbox value
+        self.on_status_change(self)
 
         # Display extracurricular name checkbox
         self.display_extracurricular = ft.Checkbox(
             value=False,
             label=self.extracurricular_name,
-            on_change=on_status_change
         )
 
         # Edit and delete buttons
@@ -66,6 +83,10 @@ class Extracurricular(ft.Row):
             self.display_extracurricular.label = new_name
         self.edit_view.visible = False
         self.update()
+
+    def homework_status_change(self, homework):
+            self.update()
+
 #date input in correct format
 def add_reminder(page):
     event_input = ft.TextField(label="Event Name")
@@ -79,7 +100,7 @@ def add_reminder(page):
             event_date = datetime.datetime.strptime(date, "%Y-%m-%d")
             current_date = datetime.datetime.now()
             if event_date > current_date:
-                page.add(ft.Text(f"Reminder added for '{event}' on {event_date.strftime('%A, %B %d, %Y')}", color=ft.colors.BLACK))
+                page.add(ft.Text(f"Reminder added for '{event}' on {event_date.strftime('%A, %B %d, %Y')}", color=ft.colors.WHITE))
             else:
                 page.add(ft.Text("The event date should be in the future. Please try again.", color=ft.colors.RED))
         except ValueError:
@@ -123,7 +144,7 @@ def before_update(self):
 # use loop to be able to create multiple reminders
 #general UI
 def main(page: ft.Page):
-    page.bgcolor = ft.Colors.BLUE_200
+    page.bgcolor = ft.Colors.BLUE_300
     page.title = "Your Personal Extracurricular Schedule"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.scroll = ft.ScrollMode.ADAPTIVE
@@ -131,6 +152,5 @@ def main(page: ft.Page):
     page.add(ExtracurricularApp())
 
     add_reminder(page)
-
 
 ft.app(target=main)

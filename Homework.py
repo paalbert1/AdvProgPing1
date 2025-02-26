@@ -126,7 +126,7 @@ class HomeworkApp(ft.Column):
 
 # define main function to run code and finish UI with background color, title, and alignments if necessary
 class Toodo():
-    print("blahblah")
+    print("ToDoList")
     def main(page: ft.Page):
         page.bgcolor = ft.Colors.GREEN_300
         page.title = "Homework Reminders"
