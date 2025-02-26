@@ -123,7 +123,7 @@ def before_update(self):
 # use loop to be able to create multiple reminders
 #general UI
 def main(page: ft.Page):
-    page.bgcolor = ft.Colors.INDIGO_200
+    page.bgcolor = ft.Colors.BLUE_200
     page.title = "Your Personal Extracurricular Schedule"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.scroll = ft.ScrollMode.ADAPTIVE
