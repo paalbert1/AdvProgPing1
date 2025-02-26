@@ -3,7 +3,7 @@ import datetime
 from flet.core import page
 from ExtracurricWithUI import ExtracurricularApp
 
-
+#define class and initialize it
 class Extracurricular(ft.Row):
     def __init__(self, Extracurricular_name, on_status_change, on_delete):
         super().__init__(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER)
@@ -58,7 +58,7 @@ class Extracurricular(ft.Row):
        if self in self._control_parent.controls:
            self._control_parent.controls.remove(self)
            self._control_parent.update()
-
+# after editing or inputting an extracurricular this will save it
     def save_clicked(self, e=None):
         new_name = self.edit_name.value
         if new_name:
@@ -66,15 +66,15 @@ class Extracurricular(ft.Row):
             self.display_extracurricular.label = new_name
         self.edit_view.visible = False
         self.update()
-
+#date input in correct format
 def add_reminder(page):
     event_input = ft.TextField(label="Event Name")
     date_input = ft.TextField(label="Event Date (YYYY-MM-DD)")
-
+#make sure user inputs in correct locations
     def on_add_reminder_click(e):
         event = event_input.value
         date = date_input.value
-
+#make sure the date input is correct, cant be in the past
         try:
             event_date = datetime.datetime.strptime(date, "%Y-%m-%d")
             current_date = datetime.datetime.now()
@@ -85,7 +85,7 @@ def add_reminder(page):
         except ValueError:
             page.add(ft.Text("Invalid date format. Please enter the date in YYYY-MM-DD format.", color=ft.colors.RED))
 
-    # Create UI elements
+#create UI elements
     page.add(
         ft.Column(
             [
@@ -96,10 +96,10 @@ def add_reminder(page):
             ]
         )
     )
-
+#allow user to switch between tabs to see progress of event
 def tabs_changed(self, e):
     self.update()
-
+#clear selected events if they are done or no longer needed
 def clear_clicked(self, e):
         for extracurricular in list(self.extracurriculars.controls):
             if extracurricular.completed:
@@ -108,7 +108,7 @@ def clear_clicked(self, e):
 def before_update(self):
     status = self.filter.tabs[self.filter.selected_index].text
     count = 0  # Initialize count variable
-
+#name the tabs so user can navigate easily
     for extracurricular in self.Extracurricular.controls:
         extracurricular.visible = (
                 status == "All Extracurriculars"
@@ -121,6 +121,7 @@ def before_update(self):
     self.items_left.value = f"{count} items left"
 
 # use loop to be able to create multiple reminders
+#general UI
 def main(page: ft.Page):
     page.bgcolor = ft.Colors.INDIGO_200
     page.title = "Your Personal Extracurricular Schedule"

@@ -66,7 +66,7 @@ class Extracurricular(ft.Row):
 class ExtracurricularApp(ft.Column):
     def __init__(self):
         super().__init__()
-        self.new_extracurricular = ft.TextField(hint_text="Enter your extracurricular and its date here",
+        self.new_extracurricular = ft.TextField(hint_text="Enter your event(s) here as a to do list",
                                                 on_submit=self.add_clicked, expand=True)
         self.extracurriculars = ft.Column()
 
