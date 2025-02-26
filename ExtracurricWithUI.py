@@ -147,5 +147,6 @@ def main(page: ft.Page):
     page.scroll = ft.ScrollMode.ADAPTIVE
     page.add(ExtracurricularApp())
 
+    page.window.close()
 
 ft.app(main)

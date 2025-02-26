@@ -131,4 +131,5 @@ def main(page: ft.Page):
 
     add_reminder(page)
 
+
 ft.app(target=main)
