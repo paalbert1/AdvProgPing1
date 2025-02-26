@@ -1,5 +1,5 @@
 #import datetime
-from os import WNOWAIT
+from os import WNOWAIT, write
 
 from flet.core import page
 #import data_gather
@@ -7,13 +7,21 @@ import flet as ft
 import datetime
 from flet.core.types import TextAlign
 #from Homework import HomeworkApp
-
+user = open("CurrentUser.txt", 'w')
+user.write("\n")
+for line in user:
+    line.strip()
+    print("strept")
+user.close()
 from data_gather import DataGather
 datagath = DataGather()
 DataGather()
 grabpass = open("infoPassing.txt", 'r')
 name = grabpass.readline()
 print("hii " + name)
+user = open("CurrentUser.txt.txt", 'w')
+user.write(name)
+user.close()
 for line in grabpass:
     line.strip()
 grabpass.close()

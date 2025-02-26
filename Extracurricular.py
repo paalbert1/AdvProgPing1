@@ -5,7 +5,6 @@ from ExtracurricWithUI import ExtracurricularApp
 
 #define class and initialize it
 class Extracurricular(ft.Row):
-   print("Extracuricular called")
     def __init__(self, Extracurricular_name, on_status_change, on_delete):
         super().__init__(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER)
 
