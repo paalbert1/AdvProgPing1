@@ -1,4 +1,3 @@
-# Redo UI to match Homework app UI closely so it is simplistic and easy for user to understand
 import signal
 import flet as ft
 import datetime
@@ -7,16 +6,21 @@ def handler(signum, frame):
     print(f"signal {signum} received")
 
 import sys
+
 if sys.platform != "win32":
     signal.signal(signal.SIGINT, handler)
 
+
 class Extracurricular(ft.Row):
-    def __init__(self, extracurricular_name, extracurricular_date, extracurricular_status_change):
+    def __init__(self, extracurricular_name, extracurricular_date, extracurricular_status_change,
+                 extracurricular_delete):
         super().__init__(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER)
         self.completed = None
         self.extracurricular_name = extracurricular_name
         self.extracurricular_date = extracurricular_date
         self.extracurricular_status_change = extracurricular_status_change
+        self.extracurricular_delete = extracurricular_delete
+
         assert isinstance(self.extracurricular_date, object)
 
         self.display_Extracurriculars = ft.Checkbox(value=False, label=self.extracurricular_name,
@@ -55,21 +59,14 @@ class Extracurricular(ft.Row):
         self.extracurricular_status_change(self)
 
     def delete_clicked(self, e):
+        # Call the delete callback passed from the parent
         self.extracurricular_delete(self)
 
-    def extracurricular_status_change(self, extracurricular):
-        self.update()
-        self.extracurricular_status_change(self)
-        #need to add here
-
-    def extracurricular_delete(self, extracurricular):
-        self.extracurricular_delete(self)
-        #need to add here
 
 class ExtracurricularApp(ft.Column):
     def __init__(self):
         super().__init__()
-        self.new_extracurricular = ft.TextField(hint_text="Enter your extracurricular and its date here",
+        self.new_extracurricular = ft.TextField(hint_text="Enter your event(s) here as a to do list",
                                                 on_submit=self.add_clicked, expand=True)
         self.extracurriculars = ft.Column()
 
@@ -100,22 +97,47 @@ class ExtracurricularApp(ft.Column):
     def add_clicked(self, e):
         extracurricular_name = self.new_extracurricular.value
         extracurricular_date = datetime.datetime.now()  # Replace with actual date input if needed
-        self.extracurriculars.controls.append(Extracurricular(extracurricular_name, extracurricular_date, extracurricular_status_change= None))
+
+        # Pass the delete function to the Extracurricular instance
+        extracurricular = Extracurricular(
+            extracurricular_name=extracurricular_name,
+            extracurricular_date=extracurricular_date,
+            extracurricular_status_change=self.extracurricular_status_updated,
+            extracurricular_delete=self.extracurricular_delete,
+        )
+        self.extracurriculars.controls.append(extracurricular)
+
         self.new_extracurricular.value = ""
+        self.update()
+
+    def extracurricular_status_updated(self, extracurricular):
+        self.update()
+
+    def extracurricular_delete(self, extracurricular):
+        # Remove the extracurricular from the list
+        self.extracurriculars.controls.remove(extracurricular)
         self.update()
 
     def tabs_changed(self, e):
         self.update()
 
     def clear_clicked(self, e):
-        for Extracurricular in list(self.extracurriculars.controls):
-            if Extracurricular.completed:
-                self.extracurricular_delete(Extracurricular)
-       
-    def extracurricular_delete(self, extracurricular):
-        # Remove the extracurricular from the list
-        self.extracurriculars.controls.remove(extracurricular)
-        self.update()
+        for extracurricular in list(self.extracurriculars.controls):
+            if extracurricular.completed:
+                self.extracurricular_delete(extracurricular)
+
+def before_update(self):
+    status = self.filter.tabs[self.filter.selected_index].text
+    count = 0
+    for extracurricular in self.Extracurricular.controls:
+        extracurricular.visible = (
+                status == "All homework"
+                or (status == "Needs to be done" and not extracurricular.completed)
+                or (status == "Already finished!" and extracurricular.completed)
+         )
+        if not extracurricular.completed:
+            count += 1
+        self.items_left.value = f"you have {count} event(s) left"
 
 def main(page: ft.Page):
     app = ExtracurricularApp()
@@ -124,5 +146,7 @@ def main(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.scroll = ft.ScrollMode.ADAPTIVE
     page.add(ExtracurricularApp())
+
+    page.window.close()
 
 ft.app(main)
