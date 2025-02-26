@@ -36,8 +36,7 @@ class DataGather:
             Day_of_week = ft.TextField(hint_text="what day of the week is today?")
             page.add(Day_of_week)
             AorB = ft.TextField(hint_text="which week is it? A/B ")
-            page.add(AorB, ft.FloatingActionButton(icon=ft.Icons.ADD, on_click=write_data))
-
+            page.add(AorB, ft.FloatingActionButton(icon=ft.Icons.ADD, on_click=next()))
 
             #page.add(ft.TextField(" type none if you dont have a class then"))
         def classes_redo(e):

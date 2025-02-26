@@ -1,7 +1,10 @@
 #import datetime
+from os import WNOWAIT
+
 from flet.core import page
 #import data_gather
 import flet as ft
+import datetime
 from flet.core.types import TextAlign
 #from Homework import HomeworkApp
 
@@ -47,7 +50,26 @@ def mains(page: ft.Page):
     def haveName():
         page.clean()
         page.bgcolor = ft.Colors.INDIGO_500
-        page.add(ft.TextField(hint_text="Welcome, click the drop down menu to see your to-do lists or calender", text_size=20, color=ft.Colors.WHITE))
+        page.add(
+            ft.Row([ft.Text(value="Welcome " + name, theme_style=ft.TextThemeStyle.HEADLINE_MEDIUM)],
+                   alignment=ft.MainAxisAlignment.CENTER),
+            ft.Column(spacing=25,),
+                ft.Row(
+                    alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                ))
+        page.add(
+            ft.Row([ft.Text(value="click the drop down menu to see your to-do lists, calender or extracurriculars", theme_style=ft.TextThemeStyle.BODY_LARGE)],
+                   alignment=ft.MainAxisAlignment.CENTER),
+            ft.Column(spacing=20, ),
+            ft.Row(
+                alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER,
+            ))
+
+        #page.add(ft.TextField(hint_text="Welcome " + name, text_size=20, color=ft.Colors.WHITE))
+        #page.add(
+            #ft.TextField(hint_text=" ",
+                        # text_size=20, color=ft.Colors.WHITE))
+        # drop down menu
         #drop down menu
         pb = ft.PopupMenuButton(
             items=[

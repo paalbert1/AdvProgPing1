@@ -133,4 +133,19 @@ class Toodo():
         page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         page.scroll = ft.ScrollMode.ADAPTIVE
         page.add(HomeworkApp())
-    ft.app(main)
+
+    grabpass = open("infoPassing.txt", 'r')
+    print("opened")
+    for line in grabpass:
+        content = grabpass.readline()
+        print(content + "content")
+        if content == "todo":
+            print("keyword found ec")
+            close = "true"
+        else:
+            close = "false"
+    if close == "true":
+        ft.app(main)
+    from Calender import createcalender
+
+
