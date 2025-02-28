@@ -1,28 +1,40 @@
-
 import flet as ft
 import datetime
+import json
+import os
 from flet.core import page
 from ExtracurricWithUI import ExtracurricularApp
 
+
+#where data will be saved
+DATA_FILE = "extracurricular_data.json"
+
+#Load data from the file
+def load_data():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, "r") as file:
+            return json.load(file)
+    return {"extracurriculars": [], "reminders": []}
+
+# Save data to the file
+def save_data(data):
+    with open(DATA_FILE, "w") as file:
+        json.dump(data, file, indent=4)
+
 #define class and initialize it
 class Extracurricular(ft.Row):
-   print("Extracuricular called")
     def __init__(self, Extracurricular_name, on_status_change, on_delete):
         super().__init__(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER)
 
         self.completed = False
-
         self.on_status_change = on_status_change
-
         self.on_delete = on_delete
-
         self.extracurricular_name = Extracurricular_name
 
         self.display_extracurricular = ft.Checkbox(
             value=False,
-        label = self.extracurricular_name,
-        on_change = self.status_changed  # Local handler
-
+            label=self.extracurricular_name,
+            on_change=self.status_changed  # Local handler
         )
 
     def status_changed(self, e):
@@ -73,10 +85,11 @@ class Extracurricular(ft.Row):
         self.update()
 
     def toggle_delete(self, e=None):
-       if self in self._control_parent.controls:
-           self._control_parent.controls.remove(self)
-           self._control_parent.update()
-# after editing or inputting an extracurricular this will save it
+        if self in self._control_parent.controls:
+            self._control_parent.controls.remove(self)
+            self._control_parent.update()
+        self.on_delete(self)
+
     def save_clicked(self, e=None):
         new_name = self.edit_name.value
         if new_name:
@@ -86,28 +99,36 @@ class Extracurricular(ft.Row):
         self.update()
 
     def homework_status_change(self, homework):
-            self.update()
+        self.update()
+
 
 #date input in correct format
 def add_reminder(page):
     event_input = ft.TextField(label="Event Name")
     date_input = ft.TextField(label="Event Date (YYYY-MM-DD)")
-#make sure user inputs in correct locations
+
     def on_add_reminder_click(e):
         event = event_input.value
         date = date_input.value
-#make sure the date input is correct, cant be in the past
+
+        # make sure the date input is correct, can't be in the past
         try:
             event_date = datetime.datetime.strptime(date, "%Y-%m-%d")
             current_date = datetime.datetime.now()
             if event_date > current_date:
                 page.add(ft.Text(f"Reminder added for '{event}' on {event_date.strftime('%A, %B %d, %Y')}", color=ft.colors.WHITE))
+
+                # Save the reminder data to file
+                data = load_data()
+                data["reminders"].append({"event": event, "date": date})
+                save_data(data)
+
             else:
                 page.add(ft.Text("The event date should be in the future. Please try again.", color=ft.colors.RED))
         except ValueError:
             page.add(ft.Text("Invalid date format. Please enter the date in YYYY-MM-DD format.", color=ft.colors.RED))
 
-#create UI elements
+    # create UI elements
     page.add(
         ft.Column(
             [
@@ -118,19 +139,24 @@ def add_reminder(page):
             ]
         )
     )
-#allow user to switch between tabs to see progress of event
+
+
+# Allow user to switch between tabs to see progress of event
 def tabs_changed(self, e):
     self.update()
-#clear selected events if they are done or no longer needed
+
+
+# Clear selected events if they are done or no longer needed
 def clear_clicked(self, e):
-        for extracurricular in list(self.extracurriculars.controls):
-            if extracurricular.completed:
-                self.extracurricular_delete(extracurricular)
+    for extracurricular in list(self.extracurriculars.controls):
+        if extracurricular.completed:
+            self.extracurricular_delete(extracurricular)
+
 
 def before_update(self):
     status = self.filter.tabs[self.filter.selected_index].text
     count = 0  # Initialize count variable
-#name the tabs so user can navigate easily
+
     for extracurricular in self.Extracurricular.controls:
         extracurricular.visible = (
                 status == "All Extracurriculars"
@@ -142,16 +168,37 @@ def before_update(self):
 
     self.items_left.value = f"{count} items left"
 
-# use loop to be able to create multiple reminders
-#general UI
+
+# General UI
 def main(page: ft.Page):
     page.bgcolor = ft.Colors.BLUE_300
     page.title = "Your Personal Extracurricular Schedule"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.scroll = ft.ScrollMode.ADAPTIVE
 
+    # Load previously saved extracurriculars
+    data = load_data()
+    for extracurricular in data["extracurriculars"]:
+        # Assuming the data structure has a list of extracurricular names to recreate them
+        page.add(Extracurricular(extracurricular["name"], on_status_change=update_extracurricular, on_delete=delete_extracurricular))
+
     page.add(ExtracurricularApp())
 
     add_reminder(page)
+
+
+def update_extracurricular(extracurricular):
+    # Update data when extracurricular status changes
+    data = load_data()
+    # You can update the list of extracurriculars here if needed
+    save_data(data)
+
+
+def delete_extracurricular(extracurricular):
+    # Remove extracurricular from the list and save it
+    data = load_data()
+    data["extracurriculars"] = [e for e in data["extracurriculars"] if e["name"] != extracurricular.extracurricular_name]
+    save_data(data)
+
 
 ft.app(target=main)
