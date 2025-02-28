@@ -9,6 +9,8 @@ from flet.core.types import TextAlign
 #from Homework import HomeworkApp
 user = open("CurrentUser.txt", 'w')
 user.write("\n")
+user.close()
+user = open("CurrentUser.txt", 'r')
 for line in user:
     line.strip()
     print("strept")
@@ -19,13 +21,13 @@ DataGather()
 grabpass = open("infoPassing.txt", 'r')
 name = grabpass.readline()
 print("hii " + name)
-user = open("CurrentUser.txt.txt", 'w')
-user.write(name)
-user.close()
 for line in grabpass:
     line.strip()
 grabpass.close()
-print("blub")
+user = open("CurrentUser.txt", 'w')
+user.write(name)
+user.close()
+
 def mains(page: ft.Page):
     place = "Homework"
     page.bgcolor = ft.Colors.INDIGO_300
