@@ -129,12 +129,22 @@ def mains(page: ft.Page):
     page.add(name_input, ft.ElevatedButton("Submit", on_click=save_name), user_name)
 
 
+import os
+import flet as ft
+
+def mains(page: ft.Page):
+    page.title = "My Heroku Flet App"
+    page.add(ft.Text("Hello from Flet on Heroku!"))
+
 if __name__ == "__main__":
-    import os
-    port = int(os.environ.get("PORT", 5000))  # Use Heroku-assigned port
-    ft.app(target=mains, view=ft.WEB_BROWSER, host="0.0.0.0", port=port)
-#allows script to run independantly
-ft.app(main)
+    port = int(os.environ.get("PORT", 5000))  # ✅ Use Heroku's assigned PORT
+    ft.app(
+        target=mains,
+        view=ft.WEB_BROWSER,  # ✅ Ensure it's in web mode
+        host="0.0.0.0",       # ✅ Bind to 0.0.0.0 (required for Heroku)
+        port=port             # ✅ Use the environment PORT
+    )
+
 from Homework import Toodo
 
 #from Extracurricular import Extracurricular
