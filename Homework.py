@@ -138,4 +138,3 @@ class Toodo():
         page.scroll = ft.ScrollMode.ADAPTIVE
         page.add(HomeworkApp())
 
-    ft.app(main)
