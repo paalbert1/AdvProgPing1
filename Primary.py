@@ -82,6 +82,7 @@ def mains(page: ft.Page):
             alignment=ft.MainAxisAlignment.CENTER,
             controls=[
                 ft.PopupMenuButton(
+                    icon_color=ft.colors.WHITE,
                     items=[
                         ft.PopupMenuItem(text="Calendar", on_click=show_calendar),
                         ft.PopupMenuItem(text="To-Do lists", on_click=show_todo),  # ✅ Corrected
