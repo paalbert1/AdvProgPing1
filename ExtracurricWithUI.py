@@ -1,6 +1,39 @@
 import flet as ft
 import datetime
 
+class Extracurricular(ft.Row):
+    def __init__(self, extracurricular_name, extracurricular_date, extracurricular_status_change, extracurricular_delete):
+        super().__init__(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER)
+        self.completed = False
+        self.extracurricular_name = extracurricular_name
+        self.extracurricular_date = extracurricular_date
+        self.extracurricular_status_change = extracurricular_status_change
+        self.extracurricular_delete = extracurricular_delete
+
+        self.display_extracurriculars = ft.Checkbox(
+            value=False,
+            label=f"{self.extracurricular_name} - {self.extracurricular_date.strftime('%Y-%m-%d')}",
+            on_change=self.status_changed
+        )
+
+        self.edit_name = ft.TextField(expand=1)
+        self.edit_button = ft.IconButton(icon=ft.icons.CREATE_OUTLINED, tooltip="Edit", on_click=self.toggle_edit)
+        self.delete_button = ft.IconButton(icon=ft.icons.DELETE_OUTLINE, tooltip="Delete", on_click=self.delete_clicked)
+
+        self.controls = [self.display_extracurriculars, ft.Row(spacing=0, controls=[self.edit_button, self.delete_button])]
+
+    def toggle_edit(self, e):
+        self.edit_name.value = self.display_extracurriculars.label
+        self.controls[0].visible = False
+        self.update()
+
+    def status_changed(self, e):
+        self.completed = self.display_extracurriculars.value
+        self.extracurricular_status_change(self)
+
+    def delete_clicked(self, e):
+        self.extracurricular_delete(self)
+
 class ExtracurricularApp(ft.Column):
     def __init__(self):
         super().__init__()
@@ -46,3 +79,13 @@ class ExtracurricularApp(ft.Column):
 
     def extracurricular_status_updated(self, extracurricular):
         self.update()
+
+    def extracurricular_delete(self, extracurricular):
+        # Remove the extracurricular from the list
+        self.extracurriculars.controls.remove(extracurricular)
+        self.update()
+
+    def clear_clicked(self, e):
+        for extracurricular in list(self.extracurriculars.controls):
+            if extracurricular.completed:
+                self.extracurricular_delete(extracurricular)
