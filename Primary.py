@@ -61,20 +61,27 @@ def mains(page: ft.Page):
         def show_extracurriculars(e):
             content_area.controls.clear()
             content_area.update()  # ✅ Force UI refresh before adding new content
-            extracurriculars_page = ExtracurricularApp()
-            content_area.controls.append(ft.Text("Extracurriculars"))
-            content_area.controls.append(extracurriculars_page)  # ✅ Ensure a new instance is created
-            page.update()
-
+            try:
+                extracurriculars_page = ExtracurricularApp()
+                content_area.controls.append(ft.Text("Extracurriculars"))
+                content_area.controls.append(extracurriculars_page)  # ✅ Ensure a new instance is created
+                page.update()
+            except Exception as err:
+                content_area.controls.append(ft.Text(f"Error loading Extracurriculars: {err}", color=ft.colors.RED))
+                page.update()
 
         # ✅ Show Homework (To-Do List)
-         def show_todo(e):
+        def show_todo(e):
             content_area.controls.clear()
             content_area.update()  # ✅ Force UI refresh before adding new content
-            homework_page = HomeworkApp()  # ✅ Ensure a new instance is created
-            content_area.controls.append(ft.Text("To-Do List"))
-            content_area.controls.append(homework_page)
-            page.update()
+            try:
+                homework_page = HomeworkApp()  # ✅ Ensure a new instance is created
+                content_area.controls.append(ft.Text("To-Do List"))
+                content_area.controls.append(homework_page)
+                page.update()
+            except Exception as err:
+                content_area.controls.append(ft.Text(f"Error loading To-Do List: {err}", color=ft.colors.RED))
+                page.update()
 
         # ✅ Show Calendar (Placeholder)
         def show_calendar(e):
