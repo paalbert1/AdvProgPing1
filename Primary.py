@@ -2,7 +2,7 @@ import os
 import flet as ft
 import psycopg2
 from ExtracurricWithUI import ExtracurricularApp  # ✅ Import Extracurricular UI
-from Homework import Homework  # ✅ Import Homework UI
+from Homework import HomeworkApp  # ✅ Import Homework UI
 
 # ✅ Connect to PostgreSQL database (Heroku provides DATABASE_URL)
 DATABASE_URL = os.environ.get("DATABASE_URL")  # Heroku provides this automatically
@@ -61,15 +61,17 @@ def mains(page: ft.Page):
         def show_extracurriculars(e):
             content_area.controls.clear()
             content_area.controls.append(ft.Text("Extracurriculars"))
-            content_area.controls.append(ExtracurricularApp())  # ✅ Add Extracurricular UI
+            content_area.controls.append(ExtracurricularApp())  # ✅ Ensure a new instance is created
             page.update()
+
 
         # ✅ Show Homework (To-Do List)
         def show_todo(e):
             content_area.controls.clear()
             content_area.controls.append(ft.Text("To-Do List"))
-            content_area.controls.append(Homework("Math Homework", 30, None, None))  # ✅ Example Homework UI
+            content_area.controls.append(HomeworkApp())  # ✅ Use HomeworkApp instead of single Homework entry
             page.update()
+
 
         # ✅ Show Calendar (Placeholder)
         def show_calendar(e):
