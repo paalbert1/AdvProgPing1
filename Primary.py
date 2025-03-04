@@ -50,7 +50,7 @@ def mains(page: ft.Page):
     # STEP 2️⃣: Show Full UI (Dropdown for Homework, Calendar, Extracurriculars)
     def show_main_ui(name):
         page.clean()  # Clear the screen
-        page.bgcolor = ft.Colors.INDIGO_500
+        page.bgcolor = ft.Colors.BLUE_50
 
         welcome_text = ft.Text(value=f"Welcome, {name}!", theme_style=ft.TextThemeStyle.HEADLINE_MEDIUM)
 
