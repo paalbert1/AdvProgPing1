@@ -16,7 +16,7 @@ def save_user_to_db(name):
     cursor.execute("INSERT INTO users (name) VALUES (%s)", (name,))
     conn.commit()
 
-# ✅ MAIN FLET FUNCTION (MERGED VERSION)
+# ✅ MAIN FLET FUNCTION (FIXED MENU VISIBILITY + NAVIGATION)
 def mains(page: ft.Page):
     page.title = "Pingree Planner"
     page.bgcolor = ft.Colors.INDIGO_300
@@ -52,33 +52,46 @@ def mains(page: ft.Page):
 
         welcome_text = ft.Text(value=f"Welcome, {name}!", theme_style=ft.TextThemeStyle.HEADLINE_MEDIUM)
 
-        # ✅ Functions for dropdown menu actions
-        def Todo(e):
-            print("To-Do clicked")
-            page.window.close()
+        # ✅ Dynamic content area (so menu actions update this instead of closing)
+        content_area = ft.Column()
 
-        def ExtraCuriculars(e):
-            print("Extracurriculars clicked")
-            page.window.close()
+        # ✅ Functions to update the page instead of closing it
+        def show_todo(e):
+            content_area.controls.clear()
+            content_area.controls.append(ft.Text("This is your To-Do list!"))
+            page.update()
 
-        def calender(e):
-            print("Calendar clicked")
-            page.window.close()
+        def show_extracurriculars(e):
+            content_area.controls.clear()
+            content_area.controls.append(ft.Text("Here are your Extracurricular Activities!"))
+            page.update()
 
-        # ✅ Dropdown menu (fully restored)
+        def show_calendar(e):
+            content_area.controls.clear()
+            content_area.controls.append(ft.Text("Welcome to the Calendar!"))
+            page.update()
+
+        # ✅ Dropdown menu (fully restored & now visible)
         pb = ft.PopupMenuButton(
             items=[
-                ft.PopupMenuItem(text="Calendar", on_click=calender),
-                ft.PopupMenuItem(text="To-Do lists", on_click=Todo),
-                ft.PopupMenuItem(text="Manage Extracurriculars", on_click=ExtraCuriculars)
+                ft.PopupMenuItem(text="Calendar", on_click=show_calendar),
+                ft.PopupMenuItem(text="To-Do lists", on_click=show_todo),
+                ft.PopupMenuItem(text="Manage Extracurriculars", on_click=show_extracurriculars)
             ]
         )
 
-        # ✅ Full UI with dropdown menu (fully restored)
+        # ✅ Full UI with dropdown menu + content area for navigation
         page.add(
-            ft.Row([welcome_text], alignment=ft.MainAxisAlignment.CENTER),
-            ft.Row([ft.Text("Click the dropdown menu to access features!", theme_style=ft.TextThemeStyle.BODY_LARGE)], alignment=ft.MainAxisAlignment.CENTER),
-            ft.Row([pb], alignment=ft.MainAxisAlignment.CENTER)
+            ft.Column(
+                [
+                    ft.Row([welcome_text], alignment=ft.MainAxisAlignment.CENTER),
+                    ft.Row([ft.Text("Click the dropdown menu to access features!", theme_style=ft.TextThemeStyle.BODY_LARGE)], alignment=ft.MainAxisAlignment.CENTER),
+                    ft.Row([pb], alignment=ft.MainAxisAlignment.CENTER),
+                    content_area  # ✅ This will update dynamically when menu items are clicked
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER
+            )
         )
 
 # ✅ Ensure Heroku binds to the correct port
