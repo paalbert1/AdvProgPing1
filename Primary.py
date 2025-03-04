@@ -24,7 +24,6 @@ def mains(page: ft.Page):
     # STEP 1️⃣: Ask for user's name
     def submit_name(e):
         save_user_to_db(name_input.value)  # Save to database
-        user_name.value = f"Hello, {name_input.value}!"
         page.clean()  # Remove name input UI
         show_main_ui(name_input.value)  # Show the main UI with dropdown menu
         page.update()
@@ -32,10 +31,19 @@ def mains(page: ft.Page):
     # UI Elements for Name Input
     name_input = ft.TextField(label="Enter your name", text_align=ft.TextAlign.CENTER)
     submit_button = ft.ElevatedButton("Submit", on_click=submit_name)
-    user_name = ft.Text(value="Hello!", theme_style=ft.TextThemeStyle.HEADLINE_MEDIUM)
 
     # Display Name Input UI
-    page.add(name_input, submit_button, user_name)
+    page.add(
+        ft.Column(
+            [
+                ft.Row([ft.Text("Welcome to the Pingree Planner!", theme_style=ft.TextThemeStyle.HEADLINE_MEDIUM)], alignment=ft.MainAxisAlignment.CENTER),
+                ft.Row([name_input], alignment=ft.MainAxisAlignment.CENTER),
+                ft.Row([submit_button], alignment=ft.MainAxisAlignment.CENTER),
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER
+        )
+    )
 
     # STEP 2️⃣: Show Full UI (Dropdown for Homework, Calendar, etc.)
     def show_main_ui(name):
@@ -44,15 +52,20 @@ def mains(page: ft.Page):
 
         welcome_text = ft.Text(value=f"Welcome, {name}!", theme_style=ft.TextThemeStyle.HEADLINE_MEDIUM)
 
+        # ✅ Functions for dropdown menu actions
         def Todo(e):
+            print("To-Do clicked")
             page.window.close()
 
         def ExtraCuriculars(e):
+            print("Extracurriculars clicked")
             page.window.close()
 
         def calender(e):
+            print("Calendar clicked")
             page.window.close()
 
+        # ✅ Dropdown menu (fully restored)
         pb = ft.PopupMenuButton(
             items=[
                 ft.PopupMenuItem(text="Calendar", on_click=calender),
@@ -61,9 +74,10 @@ def mains(page: ft.Page):
             ]
         )
 
-        # Add UI elements to the page
+        # ✅ Full UI with dropdown menu (fully restored)
         page.add(
             ft.Row([welcome_text], alignment=ft.MainAxisAlignment.CENTER),
+            ft.Row([ft.Text("Click the dropdown menu to access features!", theme_style=ft.TextThemeStyle.BODY_LARGE)], alignment=ft.MainAxisAlignment.CENTER),
             ft.Row([pb], alignment=ft.MainAxisAlignment.CENTER)
         )
 
