@@ -27,27 +27,23 @@ class ExtracurricularApp(ft.Column):
             ),
         ]
 
-    def tabs_changed(self, e):
-        """Handles tab switching when users change categories."""
-        self.update()
-
-    def clear_clicked(self, e):
-        """Removes all completed extracurriculars from the list."""
-        for extracurricular in list(self.extracurriculars.controls):
-            if extracurricular.completed:
-                self.extracurricular_delete(extracurricular)
-        self.update()
-
     def add_clicked(self, e):
-        try:
-            event_date = datetime.datetime.strptime(self.extracurricular_date.value, "%Y-%m-%d")
-            extracurricular = Extracurricular(self.new_extracurricular.value, event_date, self.extracurricular_status_updated, self.extracurricular_delete)
-            self.extracurriculars.controls.append(extracurricular)
-            self.new_extracurricular.value = ""
-            self.extracurricular_date.value = ""
-            self.update()
-        except ValueError:
-            print("Invalid date format!")
+        """Adds a new extracurricular event with a date."""
+        if self.new_extracurricular.value and self.extracurricular_date.value:
+            try:
+                event_date = datetime.datetime.strptime(self.extracurricular_date.value, "%Y-%m-%d")
+                extracurricular = Extracurricular(
+                    self.new_extracurricular.value,
+                    event_date,
+                    self.extracurricular_status_updated,
+                    self.extracurricular_delete
+                )
+                self.extracurriculars.controls.append(extracurricular)  # ✅ Add new event to UI
+                self.new_extracurricular.value = ""  # Clear input field
+                self.extracurricular_date.value = ""  # Clear date input field
+                self.update()  # ✅ Force UI refresh
+            except ValueError:
+                print("Invalid date format! Use YYYY-MM-DD.")
 
     def extracurricular_status_updated(self, extracurricular):
         self.update()
