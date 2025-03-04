@@ -1,8 +1,8 @@
 import os
 import flet as ft
 import psycopg2
-from ExtracurricWithUI import ExtracurricularApp  # ✅ Import Extracurricular UI
-from Homework import HomeworkApp  # ✅ Import Homework UI
+from ExtracurricWithUI import ExtracurricularApp  # ✅ Correct Import
+from Homework import HomeworkApp  # ✅ Correct Import
 
 # ✅ Connect to PostgreSQL database (Heroku provides DATABASE_URL)
 DATABASE_URL = os.environ.get("DATABASE_URL")  # Heroku provides this automatically
@@ -61,17 +61,15 @@ def mains(page: ft.Page):
         def show_extracurriculars(e):
             content_area.controls.clear()
             content_area.controls.append(ft.Text("Extracurriculars"))
-            content_area.controls.append(ExtracurricularApp())  # ✅ Ensure a new instance is created
+            content_area.controls.append(ExtracurricularApp())  # ✅ Corrected Usage
             page.update()
-
 
         # ✅ Show Homework (To-Do List)
         def show_todo(e):
             content_area.controls.clear()
             content_area.controls.append(ft.Text("To-Do List"))
-            content_area.controls.append(HomeworkApp())  # ✅ Use HomeworkApp instead of single Homework entry
+            content_area.controls.append(HomeworkApp())  # ✅ Corrected Usage
             page.update()
-
 
         # ✅ Show Calendar (Placeholder)
         def show_calendar(e):
@@ -79,12 +77,17 @@ def mains(page: ft.Page):
             content_area.controls.append(ft.Text("Calendar Page"))
             page.update()
 
-        # ✅ Dropdown menu (fully restored & now visible)
-        pb = ft.PopupMenuButton(
-            items=[
-                ft.PopupMenuItem(text="Calendar", on_click=show_calendar),
-                ft.PopupMenuItem(text="To-Do lists", on_click=show_todo),
-                ft.PopupMenuItem(text="Manage Extracurriculars", on_click=show_extracurriculars)
+        # ✅ FIXED: Dropdown menu (wrapped in a visible Row)
+        menu = ft.Row(
+            alignment=ft.MainAxisAlignment.CENTER,
+            controls=[
+                ft.PopupMenuButton(
+                    items=[
+                        ft.PopupMenuItem(text="Calendar", on_click=show_calendar),
+                        ft.PopupMenuItem(text="To-Do lists", on_click=show_todo),  # ✅ Corrected
+                        ft.PopupMenuItem(text="Manage Extracurriculars", on_click=show_extracurriculars)  # ✅ Corrected
+                    ]
+                )
             ]
         )
 
@@ -94,7 +97,7 @@ def mains(page: ft.Page):
                 [
                     ft.Row([welcome_text], alignment=ft.MainAxisAlignment.CENTER),
                     ft.Row([ft.Text("Click the dropdown menu to access features!", theme_style=ft.TextThemeStyle.BODY_LARGE)], alignment=ft.MainAxisAlignment.CENTER),
-                    ft.Row([pb], alignment=ft.MainAxisAlignment.CENTER),
+                    menu,  # ✅ FIXED: Now wrapped in a Row
                     content_area  # ✅ This will update dynamically when menu items are clicked
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
