@@ -28,26 +28,22 @@ class HomeworkApp(ft.Column):
             ),
         ]
 
-    def add_clicked(self, e):
-        """Adds a new homework task with time."""
-        if self.new_homework.value and self.new_homework_time.value.isdigit():
-            homework = Homework(
-                self.new_homework.value,
-                self.new_homework_time.value,
-                self.homework_status_change,
-                self.homework_delete
+    # ✅ FIXED: `tabs_changed` function is now properly defined
+    def tabs_changed(self, e):
+        """Handles tab switching when users change categories."""
+        self.before_update()
+        self.update()
+
+    def before_update(self):
+        """Update UI based on the selected tab."""
+        status = self.filter.tabs[self.filter.selected_index].text
+        count = 0
+        for homework in self.homeworks.controls:
+            homework.visible = (
+                status == "All Homework"
+                or (status == "Needs to be done" and not homework.completed)
+                or (status == "Completed" and homework.completed)
             )
-            self.homeworks.controls.append(homework)  # ✅ Add new task to UI
-            self.new_homework.value = ""  # Clear input field
-            self.new_homework_time.value = ""  # Clear time input field
-            self.calculate_total_time()
-            self.update()  # ✅ Force UI refresh
-
-    def calculate_total_time(self):
-        total = sum(homework.homework_time for homework in self.homeworks.controls if not homework.completed)
-        self.total_time.value = f"Total time: {total} minutes"
-        self.update()
-
-    def homework_status_change(self, homework):
-        self.calculate_total_time()
-        self.update()
+            if homework.visible:
+                count += 1
+        self.items_left.value = f"{count} homework task(s) left"
