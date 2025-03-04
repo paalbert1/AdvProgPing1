@@ -1,29 +1,16 @@
-import signal
 import flet as ft
 import datetime
 
-
-def handler(signum, frame):
-    print(f"signal {signum} received")
-
-
-import sys
-
-if sys.platform != "win32":
-    signal.signal(signal.SIGINT, handler)
-
-
 class Extracurricular(ft.Row):
-    def __init__(self, extracurricular_name, extracurricular_date, extracurricular_status_change,
-                 extracurricular_delete):
+    def __init__(self, extracurricular_name, extracurricular_status_change, extracurricular_delete):
         super().__init__(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER)
-        self.completed = False  # Starting status of completion
+        self.completed = False
         self.extracurricular_name = extracurricular_name
-        self.extracurricular_date = extracurricular_date
         self.extracurricular_status_change = extracurricular_status_change
         self.extracurricular_delete = extracurricular_delete
 
-        self.display_Extracurriculars = ft.Checkbox(
+        # ✅ Fix: Ensure the checkbox updates properly
+        self.display_extracurriculars = ft.Checkbox(
             value=False,
             label=self.extracurricular_name,
             on_change=self.status_changed
@@ -33,7 +20,7 @@ class Extracurricular(ft.Row):
         self.delete_button = ft.IconButton(icon=ft.icons.DELETE_OUTLINE, tooltip="Delete", on_click=self.delete_clicked)
 
         self.controls = [
-            self.display_Extracurriculars,
+            self.display_extracurriculars,
             ft.Row(spacing=0, controls=[self.edit_button, self.delete_button]),
         ]
 
@@ -46,34 +33,31 @@ class Extracurricular(ft.Row):
         self.controls.append(self.edit_view)
 
     def toggle_edit(self, e):
-        self.edit_name.value = self.display_Extracurriculars.label
+        self.edit_name.value = self.display_extracurriculars.label
         self.controls[0].visible = False
         self.edit_view.visible = True
         self.update()
 
     def save_clicked(self, e):
-        self.display_Extracurriculars.label = self.edit_name.value
+        self.extracurricular_name = self.edit_name.value
+        self.display_extracurriculars.label = self.extracurricular_name
         self.controls[0].visible = True
         self.edit_view.visible = False
         self.update()
 
     def status_changed(self, e):
-        self.completed = self.display_Extracurriculars.value
+        self.completed = self.display_extracurriculars.value
         self.extracurricular_status_change(self)
 
     def delete_clicked(self, e):
-        # Call the delete callback passed from the parent
         self.extracurricular_delete(self)
-
 
 class ExtracurricularApp(ft.Column):
     def __init__(self):
         super().__init__()
-        self.new_extracurricular = ft.TextField(hint_text="Enter your event(s) here as a to do list",
-                                                on_submit=self.add_clicked, expand=True)
+        self.new_extracurricular = ft.TextField(hint_text="Enter your event(s) here", expand=True)
         self.extracurriculars = ft.Column()
 
-        # Filter all of the tabs to make it less confusing and keep it simple
         self.filter = ft.Tabs(
             scrollable=False, selected_index=0, on_change=self.tabs_changed,
             tabs=[ft.Tab(text="All extracurriculars"), ft.Tab(text="In the future"), ft.Tab(text="Already finished!")]
@@ -92,24 +76,19 @@ class ExtracurricularApp(ft.Column):
                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                     vertical_alignment=ft.CrossAxisAlignment.CENTER,
                     controls=[self.items_left,
-                              ft.OutlinedButton(text="Clear already done", on_click=self.clear_clicked)]
+                              ft.OutlinedButton(text="Clear completed", on_click=self.clear_clicked)]
                 ),
             ]),
         ]
 
     def add_clicked(self, e):
         extracurricular_name = self.new_extracurricular.value
-        extracurricular_date = datetime.datetime.now()  # Replace with actual date input if needed
-
-        # Pass the delete function to the Extracurricular instance
         extracurricular = Extracurricular(
             extracurricular_name=extracurricular_name,
-            extracurricular_date=extracurricular_date,
             extracurricular_status_change=self.extracurricular_status_updated,
             extracurricular_delete=self.extracurricular_delete,
         )
         self.extracurriculars.controls.append(extracurricular)
-
         self.new_extracurricular.value = ""
         self.update()
 
@@ -117,42 +96,10 @@ class ExtracurricularApp(ft.Column):
         self.update()
 
     def extracurricular_delete(self, extracurricular):
-        # Remove the extracurricular from the list
         self.extracurriculars.controls.remove(extracurricular)
-        self.update()
-
-    def tabs_changed(self, e):
-        self.before_update()
         self.update()
 
     def clear_clicked(self, e):
         for extracurricular in list(self.extracurriculars.controls):
             if extracurricular.completed:
                 self.extracurricular_delete(extracurricular)
-
-    def before_update(self):
-        # Get the selected tab
-        status = self.filter.tabs[self.filter.selected_index].text
-        count = 0
-        for extracurricular in self.extracurriculars.controls:
-            extracurricular.visible = (
-                    status == "All extracurriculars"
-                    or (status == "In the future" and not extracurricular.completed)
-                    or (status == "Already finished!" and extracurricular.completed)
-            )
-            if not extracurricular.completed:
-                count += 1
-        self.items_left.value = f"{count} event(s) left"
-
-
-def main(page: ft.Page):
-    app = ExtracurricularApp()
-    page.bgcolor = ft.colors.INDIGO_200
-    page.title = "Extracurricular Schedule"
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.scroll = ft.ScrollMode.ADAPTIVE
-    page.add(app)
-
-    page.window.close()
-
-ft.app(main)
