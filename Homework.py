@@ -5,7 +5,13 @@ class Homework(ft.Row):
         super().__init__(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, vertical_alignment=ft.CrossAxisAlignment.CENTER)
         self.completed = False
         self.homework_name = homework_name
-        self.homework_time = int(homework_time)  # Convert time to an int
+
+        # ✅ Ensure homework_time is an integer (avoiding crashes)
+        try:
+            self.homework_time = int(homework_time)
+        except ValueError:
+            self.homework_time = 0  # Default to 0 if invalid
+
         self.homework_status_change = homework_status_change
         self.homework_delete = homework_delete
 
@@ -37,7 +43,13 @@ class Homework(ft.Row):
 
     def save_clicked(self, e):
         self.homework_name = self.edit_name.value
-        self.homework_time = int(self.edit_time.value)  # Update with the new integer value
+
+        # ✅ Prevent app crashes by handling invalid input
+        try:
+            self.homework_time = int(self.edit_time.value)
+        except ValueError:
+            self.homework_time = 0  # Default to 0
+
         self.display_homework.label = f"{self.homework_name} - {self.homework_time} min"
         self.controls[0].visible = True
         self.edit_view.visible = False
@@ -46,7 +58,7 @@ class Homework(ft.Row):
 
     def status_changed(self, e):
         self.completed = self.display_homework.value
-        self.homework_status_change(self)  # Notify about status change
+        self.homework_status_change(self)
 
     def delete_clicked(self, e):
         self.homework_delete(self)
@@ -83,7 +95,6 @@ class HomeworkApp(ft.Column):
         ]
 
     def calculate_total_time(self):
-        #Calculate the sum of all homework times.
         total = sum(homework.homework_time for homework in self.homeworks.controls if not homework.completed)
         self.total_time.value = f"Total time: {total} minutes"
         self.update()
@@ -129,12 +140,4 @@ class HomeworkApp(ft.Column):
             if not homework.completed:
                 count += 1
         self.items_left.value = f"You have {count} homework assignment(s) left"
-
-class Toodo():
-    def main(page: ft.Page):
-        page.bgcolor = ft.Colors.GREEN_300
-        page.title = "Homework Reminders"
-        page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-        page.scroll = ft.ScrollMode.ADAPTIVE
-        page.add(HomeworkApp())
 
