@@ -2,6 +2,7 @@ import flet as ft
 import datetime
 import json
 import os
+import psycopg2
 from flet.core import page
 from ExtracurricWithUI import ExtracurricularApp
 
