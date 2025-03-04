@@ -130,10 +130,11 @@ def mains(page: ft.Page):
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Heroku provides PORT dynamically
-    ft.app(target=main, view=ft.WEB_BROWSER, host='0.0.0.0', port=port)
+    import os
+    port = int(os.environ.get("PORT", 5000))  # Use Heroku-assigned port
+    ft.app(target=mains, view=ft.WEB_BROWSER, host="0.0.0.0", port=port)
 #allows script to run independantly
-ft.app(mains)
+ft.app(main)
 from Homework import Toodo
 
 #from Extracurricular import Extracurricular
