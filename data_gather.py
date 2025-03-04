@@ -93,8 +93,6 @@ class DataGather:
             for line in USR:
                 count += 1
                 content = USR.readline()
-                print("hi")
-                print(content)
                 keyWord = name.value + "\n"
                 if keyWord == content:
                     next()
@@ -104,6 +102,7 @@ class DataGather:
             if found == "false":
                 addname()
                 NameEntered()
+
 
             USR.close()
 
@@ -130,7 +129,18 @@ class DataGather:
             grabpass = open("infoPassing.txt", 'a')
             grabpass.write(name.value + "\n")
             grabpass.close()
-            page.window.close()
+            page.clean()
+            password = ft.TextField(hint_text="type your password here")
+            def password_entered(e):
+                if password.value == "pixie":
+                    page.window.close()
+                else:
+                    page.clean()
+                    page.add(ft.TextField("YOUR WRONG LEAVE NOW"))
+
+
+            page.add(password, ft.FloatingActionButton(icon=ft.Icons.ADD, on_click=password_entered))
+
 
 
 

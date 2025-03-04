@@ -1,9 +1,11 @@
 #import datetime
 from os import WNOWAIT, write
-
+import os
+import flet as ft
+import psycopg2
 from flet.core import page
 #import data_gather
-import flet as ft
+
 import datetime
 from flet.core.types import TextAlign
 #from Homework import HomeworkApp
@@ -99,6 +101,37 @@ def mains(page: ft.Page):
     haveName()
     #page.add(name, ft.FloatingActionButton(icon=ft.Icons.ADD, on_click=haveName))
 
+
+# Connect to the PostgreSQL database provided by Heroku
+DATABASE_URL = os.environ.get("DATABASE_URL")  # Heroku provides this automatically
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+cursor = conn.cursor()
+
+# Create users table if it does not exist
+cursor.execute("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name TEXT)")
+conn.commit()
+
+
+def save_user_to_db(name):
+    cursor.execute("INSERT INTO users (name) VALUES (%s)", (name,))
+    conn.commit()
+
+
+def mains(page: ft.Page):
+    def save_name(e):
+        save_user_to_db(name_input.value)
+        user_name.value = f"Hello, {name_input.value}!"
+        page.update()
+
+    name_input = ft.TextField(label="Enter your name")
+    user_name = ft.Text(value="Hello, Default User!")
+
+    page.add(name_input, ft.ElevatedButton("Submit", on_click=save_name), user_name)
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8550))  # Heroku provides PORT dynamically
+    ft.app(target=mains, view=ft.WEB_BROWSER, port=port)
 #allows script to run independantly
 ft.app(mains)
 from Homework import Toodo
