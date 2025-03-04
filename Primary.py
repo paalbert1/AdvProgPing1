@@ -1,6 +1,8 @@
 import os
 import flet as ft
 import psycopg2
+from ExtracurricWithUI import ExtracurricularApp  # ✅ Import Extracurricular UI
+from Homework import Homework  # ✅ Import Homework UI
 
 # ✅ Connect to PostgreSQL database (Heroku provides DATABASE_URL)
 DATABASE_URL = os.environ.get("DATABASE_URL")  # Heroku provides this automatically
@@ -16,7 +18,7 @@ def save_user_to_db(name):
     cursor.execute("INSERT INTO users (name) VALUES (%s)", (name,))
     conn.commit()
 
-# ✅ MAIN FLET FUNCTION (FIXED MENU VISIBILITY + NAVIGATION)
+# ✅ MAIN FLET FUNCTION (NOW CONNECTED TO EXTRACURRICULAR & HOMEWORK)
 def mains(page: ft.Page):
     page.title = "Pingree Planner"
     page.bgcolor = ft.Colors.INDIGO_300
@@ -45,7 +47,7 @@ def mains(page: ft.Page):
         )
     )
 
-    # STEP 2️⃣: Show Full UI (Dropdown for Homework, Calendar, etc.)
+    # STEP 2️⃣: Show Full UI (Dropdown for Homework, Calendar, Extracurriculars)
     def show_main_ui(name):
         page.clean()  # Clear the screen
         page.bgcolor = ft.Colors.INDIGO_500
@@ -55,20 +57,24 @@ def mains(page: ft.Page):
         # ✅ Dynamic content area (so menu actions update this instead of closing)
         content_area = ft.Column()
 
-        # ✅ Functions to update the page instead of closing it
-        def show_todo(e):
-            content_area.controls.clear()
-            content_area.controls.append(ft.Text("This is your To-Do list!"))
-            page.update()
-
+        # ✅ Show Extracurriculars Page
         def show_extracurriculars(e):
             content_area.controls.clear()
-            content_area.controls.append(ft.Text("Here are your Extracurricular Activities!"))
+            content_area.controls.append(ft.Text("Extracurriculars"))
+            content_area.controls.append(ExtracurricularApp())  # ✅ Add Extracurricular UI
             page.update()
 
+        # ✅ Show Homework (To-Do List)
+        def show_todo(e):
+            content_area.controls.clear()
+            content_area.controls.append(ft.Text("To-Do List"))
+            content_area.controls.append(Homework("Math Homework", 30, None, None))  # ✅ Example Homework UI
+            page.update()
+
+        # ✅ Show Calendar (Placeholder)
         def show_calendar(e):
             content_area.controls.clear()
-            content_area.controls.append(ft.Text("Welcome to the Calendar!"))
+            content_area.controls.append(ft.Text("Calendar Page"))
             page.update()
 
         # ✅ Dropdown menu (fully restored & now visible)
