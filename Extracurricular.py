@@ -5,7 +5,6 @@ import os
 from flet.core import page
 from ExtracurricWithUI import ExtracurricularApp
 
-
 #where data will be saved
 DATA_FILE = "extracurricular_data.json"
 
@@ -50,12 +49,12 @@ class Extracurricular(ft.Row):
         # Edit and delete buttons
         self.edit_button = ft.IconButton(
             icon=ft.icons.CREATE_OUTLINED,
-            tooltip="Edit",
+            tooltip="Edit Extracurricular",
             on_click=self.toggle_edit
         )
         self.delete_button = ft.IconButton(
             icon=ft.icons.DELETE_OUTLINED,
-            tooltip="Delete",
+            tooltip="Delete Extracurricular",
             on_click=self.toggle_delete
         )
 
@@ -67,7 +66,7 @@ class Extracurricular(ft.Row):
                 self.edit_name,
                 ft.IconButton(
                     icon=ft.icons.DONE_OUTLINE_OUTLINED,
-                    icon_color=ft.colors.BLUE,
+                    icon_color=ft.colors.WHITE,
                     tooltip="Save",
                     on_click=self.save_clicked
                 ),
@@ -100,7 +99,6 @@ class Extracurricular(ft.Row):
 
     def homework_status_change(self, homework):
         self.update()
-
 
 #date input in correct format
 def add_reminder(page):
@@ -140,18 +138,15 @@ def add_reminder(page):
         )
     )
 
-
 # Allow user to switch between tabs to see progress of event
 def tabs_changed(self, e):
     self.update()
-
 
 # Clear selected events if they are done or no longer needed
 def clear_clicked(self, e):
     for extracurricular in list(self.extracurriculars.controls):
         if extracurricular.completed:
             self.extracurricular_delete(extracurricular)
-
 
 def before_update(self):
     status = self.filter.tabs[self.filter.selected_index].text
@@ -167,7 +162,6 @@ def before_update(self):
             count += 1
 
     self.items_left.value = f"{count} items left"
-
 
 # General UI
 def main(page: ft.Page):
@@ -186,19 +180,16 @@ def main(page: ft.Page):
 
     add_reminder(page)
 
-
 def update_extracurricular(extracurricular):
     # Update data when extracurricular status changes
     data = load_data()
     # You can update the list of extracurriculars here if needed
     save_data(data)
 
-
 def delete_extracurricular(extracurricular):
     # Remove extracurricular from the list and save it
     data = load_data()
     data["extracurriculars"] = [e for e in data["extracurriculars"] if e["name"] != extracurricular.extracurricular_name]
     save_data(data)
-
 
 ft.app(target=main)
