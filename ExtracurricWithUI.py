@@ -27,22 +27,19 @@ class ExtracurricularApp(ft.Column):
             ),
         ]
 
-    # ✅ FIXED: `tabs_changed` function is now properly defined
-    def tabs_changed(self, e):
-        """Handles tab switching when users change categories."""
-        self.before_update()
-        self.update()
-
-    def before_update(self):
-        """Update UI based on the selected tab."""
-        status = self.filter.tabs[self.filter.selected_index].text
-        count = 0
-        for extracurricular in self.extracurriculars.controls:
-            extracurricular.visible = (
-                status == "All Activities"
-                or (status == "Upcoming" and not extracurricular.completed)
-                or (status == "Past Events" and extracurricular.completed)
-            )
-            if extracurricular.visible:
-                count += 1
-        self.items_left.value = f"{count} event(s) left"
+    # ✅ FIXED: `add_clicked` function is now properly defined
+    def add_clicked(self, e):
+        """Adds a new extracurricular event with a date."""
+        if self.new_extracurricular.value and self.extracurricular_date.value:
+            try:
+                event_date = datetime.datetime.strptime(self.extracurricular_date.value, "%Y-%m-%d")
+                extracurricular = Extracurricular(
+                    self.new_extracurricular.value,
+                    event_date,
+                    self.extracurricular_status_updated,
+                    self.extracurricular_delete
+                )
+                self.extracurriculars.controls.append(extracurricular)  # ✅ Add new event to UI
+                self.new_extracurricular.value = ""  # Clear input field
+                self.extracurricular_date.value = ""  # Clear date input field
+                self.update()  # ✅ Force UI refresh
