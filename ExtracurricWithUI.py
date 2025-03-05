@@ -42,4 +42,33 @@ class ExtracurricularApp(ft.Column):
                 self.extracurriculars.controls.append(extracurricular)  # ✅ Add new event to UI
                 self.new_extracurricular.value = ""  # Clear input field
                 self.extracurricular_date.value = ""  # Clear date input field
-                self.update()  # ✅ Force UI refresh
+                try:
+                    self.update()  # ✅ Force UI refresh
+                except Exception as e:
+                    print(f'Error: {e}')
+            except ValueError:
+                print("Invalid date format. Please enter YYYY-MM-DD.")
+
+    # ✅ FIXED: `tabs_changed` function is now properly included
+    def tabs_changed(self, e):
+        """Handles tab switching when users change categories."""
+        selected_tab = self.filter.selected_index
+
+        if selected_tab == 0:  # "All Activities"
+            for item in self.extracurriculars.controls:
+                item.visible = True
+        elif selected_tab == 1:  # "Upcoming"
+            for item in self.extracurriculars.controls:
+                if hasattr(item, 'event_date') and item.event_date >= datetime.datetime.now():
+                    item.visible = True
+                else:
+                    item.visible = False
+        elif selected_tab == 2:  # "Past Events"
+            for item in self.extracurriculars.controls:
+                if hasattr(item, 'event_date') and item.event_date < datetime.datetime.now():
+                    item.visible = True
+                else:
+                    item.visible = False
+
+        self.update()  # Refresh UI
+
